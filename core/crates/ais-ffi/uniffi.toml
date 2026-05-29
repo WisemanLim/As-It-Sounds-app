@@ -1,0 +1,10 @@
+[bindings.swift]
+module_name = "AisCoreFFI"
+ffi_module_name = "AisCoreFFI"
+generate_module_map = true
+omit_argument_labels = false
+
+[bindings.kotlin]
+package_name = "com.asitsounds.core"
+cdylib_name = "ais_ffi"
+generate_immutable_records = true

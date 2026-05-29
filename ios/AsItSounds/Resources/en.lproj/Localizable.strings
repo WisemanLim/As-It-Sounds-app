@@ -1,0 +1,62 @@
+/* Tabs */
+"tab.transcribe" = "Transcribe";
+"tab.library"    = "Library";
+"tab.translit"   = "Translit";
+"tab.settings"   = "Settings";
+
+/* Pipeline screen */
+"pipeline.title"             = "Transcribe";
+"pipeline.model.title"       = "Whisper model";
+"pipeline.model.download"    = "Download ggml-%@.bin";
+"pipeline.translator.title"  = "Translator";
+"pipeline.translator.off"    = "Off";
+"pipeline.file.title"        = "Audio / Video file";
+"pipeline.file.pick"         = "Pick a file…";
+"pipeline.run"               = "Transcribe";
+"pipeline.stage.ready"       = "ready";
+"pipeline.stage.decoding"    = "decoding…";
+"pipeline.stage.asr"         = "transcribing…";
+"pipeline.stage.translit"    = "translit…";
+"pipeline.stage.translating" = "translating…";
+"pipeline.stage.done"        = "done";
+"pipeline.segments.count"    = "Segments (%d)";
+"pipeline.open.player"       = "Open player with highlight";
+
+/* Export */
+"export.title"   = "Export";
+"export.save_as" = "Save as .%@";
+
+/* Library */
+"library.title"      = "Library";
+"library.new"        = "New project";
+"library.empty"      = "No projects yet.";
+"library.detail.empty" = "No files yet. Transcribe one to populate.";
+
+/* Translit demo */
+"translit.title"   = "As It Sounds";
+"translit.input"   = "English / French / Japanese / …";
+"translit.button"  = "Transliterate";
+"translit.output"  = "Hangul";
+"translit.core_v" = "Core version";
+"translit.whisper.title" = "Whisper backend";
+
+/* Settings */
+"settings.title"          = "Settings";
+"settings.model"          = "Whisper model";
+"settings.translator"     = "Default translator";
+"settings.dark_mode"      = "Dark mode";
+"settings.dark_mode.auto" = "System";
+"settings.dark_mode.on"   = "Always on";
+"settings.dark_mode.off"  = "Always off";
+"settings.about"          = "About";
+"settings.version"        = "Version";
+"settings.licenses"       = "Open-source licenses";
+"settings.data.clear"     = "Clear cache";
+"settings.data.usage"     = "Storage used";
+
+/* Accessibility */
+"a11y.segment.row"        = "Segment %d, starting %@, English %@, Hangul %@.";
+"a11y.translator.picker"  = "Translation engine";
+"a11y.model.download"     = "Download Whisper model";
+"a11y.pipeline.run"       = "Start transcription";
+"a11y.player.seek"        = "Seek to %@";

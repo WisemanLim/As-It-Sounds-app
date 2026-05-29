@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">As It Sounds</string>
+
+    <!-- Tabs -->
+    <string name="tab_transcribe">Transcribe</string>
+    <string name="tab_library">Library</string>
+    <string name="tab_translit">Translit</string>
+    <string name="tab_settings">Settings</string>
+
+    <!-- Pipeline screen -->
+    <string name="pipeline_title">Transcribe</string>
+    <string name="pipeline_model_title">Whisper model</string>
+    <string name="pipeline_model_download">Download ggml-%1$s.bin</string>
+    <string name="pipeline_translator_title">Translator</string>
+    <string name="pipeline_file_title">Audio / Video</string>
+    <string name="pipeline_file_pick">Pick a file…</string>
+    <string name="pipeline_run">Transcribe</string>
+    <string name="pipeline_stage_decoding">decoding…</string>
+    <string name="pipeline_stage_asr">transcribing…</string>
+    <string name="pipeline_stage_translit">translit…</string>
+    <string name="pipeline_stage_translating">translating %1$d/%2$d…</string>
+    <string name="pipeline_stage_done">Done — %1$d segments</string>
+    <string name="pipeline_stage_failed">Failed — %1$s</string>
+    <string name="pipeline_segments_count">Segments (%1$d)</string>
+    <string name="pipeline_open_player">Open player with highlight</string>
+
+    <!-- Export -->
+    <string name="export_title">Export</string>
+    <string name="export_save_as">Save as .%1$s</string>
+
+    <!-- Library -->
+    <string name="library_title">Library</string>
+    <string name="library_new">New project</string>
+    <string name="library_empty">No projects yet.</string>
+    <string name="library_open">Open</string>
+    <string name="library_back">Back</string>
+    <string name="library_detail_empty">No files yet. Transcribe a file from the Transcribe tab — it persists here automatically.</string>
+
+    <!-- Translit demo -->
+    <string name="translit_input">English / French / Japanese / …</string>
+    <string name="translit_button">Transliterate</string>
+    <string name="translit_output">Hangul</string>
+    <string name="translit_core_v">Core v%1$s</string>
+    <string name="translit_whisper_title">Whisper backend</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_model">Whisper model</string>
+    <string name="settings_translator">Default translator</string>
+    <string name="settings_dark_mode">Dark mode</string>
+    <string name="settings_dark_mode_auto">System</string>
+    <string name="settings_dark_mode_on">Always on</string>
+    <string name="settings_dark_mode_off">Always off</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_licenses">Open-source licenses</string>
+    <string name="settings_data_clear">Clear cache</string>
+    <string name="settings_data_usage">Storage used</string>
+
+    <!-- Accessibility (TalkBack) -->
+    <string name="a11y_segment_row">Segment %1$d, starting %2$s, English %3$s, Hangul %4$s.</string>
+    <string name="a11y_translator_picker">Translation engine</string>
+    <string name="a11y_model_download">Download Whisper model</string>
+    <string name="a11y_pipeline_run">Start transcription</string>
+    <string name="a11y_player_seek">Seek to %1$s</string>
+</resources>

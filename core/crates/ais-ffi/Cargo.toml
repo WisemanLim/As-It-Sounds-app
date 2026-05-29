@@ -1,0 +1,26 @@
+[package]
+name = "ais-ffi"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "UniFFI bindings — exposes ais-translit to Swift (iOS) and Kotlin (Android)."
+
+[lib]
+name = "ais_ffi"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[dependencies]
+ais-translit = { path = "../ais-translit" }
+uniffi = { workspace = true }
+
+[build-dependencies]
+uniffi = { workspace = true, features = ["build"] }
+
+[features]
+default = []
+cli = ["uniffi/cli"]
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/bin/uniffi-bindgen.rs"
+required-features = ["cli"]

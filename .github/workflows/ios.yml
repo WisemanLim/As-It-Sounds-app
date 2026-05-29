@@ -1,0 +1,107 @@
+name: iOS
+
+# ─── DISABLED ─────────────────────────────────────────────────────────────
+# Auto-triggers are commented out per Stage-2.5 hold. Only manual runs via
+# the "Run workflow" button in Actions UI fire. Re-enable by uncommenting
+# the push/pull_request blocks below.
+# ──────────────────────────────────────────────────────────────────────────
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "ios/**"
+  #     - "core/**"
+  #     - ".github/workflows/ios.yml"
+  # pull_request:
+  #   branches: [main]
+  #   paths:
+  #     - "ios/**"
+  #     - "core/**"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Simulator build
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install xcodegen
+        run: brew install xcodegen librsvg
+
+      - name: Install Rust + iOS targets
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+          source "$HOME/.cargo/env"
+          rustup target add aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios
+
+      - name: Cache Cargo build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            core/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('core/Cargo.lock') }}
+
+      - name: Cache whisper.cpp build
+        uses: actions/cache@v4
+        with:
+          path: |
+            core/third_party/whisper.cpp/build-ios-device
+            core/third_party/whisper.cpp/build-ios-sim
+            core/target/whisper.xcframework
+          key: ${{ runner.os }}-whisper-1.7.5
+
+      - name: Fetch whisper.cpp
+        run: |
+          test -d core/third_party/whisper.cpp || \
+            git clone --depth 1 --branch v1.7.5 \
+              https://github.com/ggerganov/whisper.cpp core/third_party/whisper.cpp
+
+      - name: Build Rust core for iOS
+        run: |
+          source "$HOME/.cargo/env"
+          cd core && ./scripts/build-ios.sh
+
+      - name: Build whisper.xcframework
+        run: |
+          if [ ! -d core/target/whisper.xcframework ]; then
+            (cd core/third_party/whisper.cpp && ./build-xcframework.sh) || true
+            (cd core && ./scripts/assemble-whisper-xcframework.sh)
+          fi
+
+      - name: Clone GRDB (local SwiftPM)
+        run: |
+          test -d ios/packages/GRDB || \
+            git clone --depth 1 --branch v6.29.3 \
+              https://github.com/groue/GRDB.swift ios/packages/GRDB
+
+      - name: Generate Xcode project
+        run: cd ios && xcodegen generate
+
+      - name: Build for iOS Simulator
+        run: |
+          cd ios
+          xcodebuild \
+            -project AsItSounds.xcodeproj \
+            -scheme AsItSounds \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+            -derivedDataPath build \
+            build
+
+      - name: Upload .app artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AsItSounds-sim
+          path: ios/build/Build/Products/Debug-iphonesimulator/AsItSounds.app
+          retention-days: 7

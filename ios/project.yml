@@ -1,0 +1,86 @@
+name: AsItSounds
+options:
+  bundleIdPrefix: com.asitsounds
+  developmentLanguage: en
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "26.0"
+  createIntermediateGroups: true
+
+packages:
+  GRDB:
+    path: packages/GRDB
+
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+    SWIFT_STRICT_CONCURRENCY: complete
+    DEAD_CODE_STRIPPING: YES
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  AsItSounds:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: AsItSounds
+        excludes:
+          - "Resources/Info.plist"
+      - path: ../core/bindings/swift/AisCoreFFI.swift
+        group: AisCoreFFI
+    resources:
+      - AsItSounds/Resources/Assets.xcassets
+      - AsItSounds/Resources/en.lproj
+      - AsItSounds/Resources/ko.lproj
+    info:
+      path: AsItSounds/Resources/Info.plist
+      properties:
+        UILaunchScreen:
+          UIColorName: ""
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSMicrophoneUsageDescription: "Used for live transcription (Phase 2)."
+        NSPhotoLibraryUsageDescription: "Used to import audio/video from your photo library."
+        UIBackgroundModes:
+          - audio
+          - processing
+        BGTaskSchedulerPermittedIdentifiers:
+          - com.asitsounds.ios.transcribe
+        CFBundleDisplayName: "As It Sounds"
+    settings:
+      base:
+        ENABLE_BASE_INTERNATIONALIZATION: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.asitsounds.ios
+        INFOPLIST_FILE: AsItSounds/Resources/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SUPPORTS_MACCATALYST: NO
+        HEADER_SEARCH_PATHS:
+          - "$(SRCROOT)/../core/bindings/swift"
+        SWIFT_INCLUDE_PATHS: "$(SRCROOT)/../core/bindings/swift"
+        OTHER_SWIFT_FLAGS: "-Xcc -fmodule-map-file=$(SRCROOT)/../core/bindings/swift/module.modulemap"
+        FRAMEWORK_SEARCH_PATHS:
+          - "$(inherited)"
+          - "$(SRCROOT)/../core/target"
+        SWIFT_OBJC_BRIDGING_HEADER: "AsItSounds/AsItSounds-Bridging-Header.h"
+        CLANG_ENABLE_MODULES: YES
+    dependencies:
+      - framework: ../core/target/AisCoreFFI.xcframework
+        embed: false
+      - framework: ../core/target/whisper.xcframework
+        embed: false
+      - sdk: Accelerate.framework
+      - sdk: Metal.framework
+      - sdk: MetalKit.framework
+      - sdk: CoreML.framework
+      - package: GRDB
+        product: GRDB

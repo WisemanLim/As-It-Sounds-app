@@ -1,0 +1,9 @@
+target/
+**/*.rs.bk
+Cargo.lock.bak
+bindings/swift/*.swift
+bindings/swift/*.h
+bindings/swift/*.modulemap
+bindings/kotlin/**/*.kt
+*.xcframework/
+.DS_Store

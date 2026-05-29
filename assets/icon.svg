@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Background: brand navy -->
+  <rect width="1024" height="1024" fill="#0A1733"/>
+
+  <!-- Accent halo (Gemini-tone blue) -->
+  <circle cx="512" cy="512" r="440" fill="none" stroke="#4F8DFF" stroke-width="6" opacity="0.45"/>
+
+  <!-- Waveform: 13 vertical bars, symmetrical envelope, accent fill -->
+  <g fill="#4F8DFF">
+    <rect x="200" y="475" width="36"  height="74"  rx="18"/>
+    <rect x="262" y="430" width="36"  height="164" rx="18"/>
+    <rect x="324" y="380" width="36"  height="264" rx="18"/>
+    <rect x="386" y="320" width="36"  height="384" rx="18"/>
+    <rect x="448" y="260" width="36"  height="504" rx="18"/>
+    <rect x="510" y="200" width="36"  height="624" rx="18"/>
+    <rect x="572" y="260" width="36"  height="504" rx="18"/>
+    <rect x="634" y="320" width="36"  height="384" rx="18"/>
+    <rect x="696" y="380" width="36"  height="264" rx="18"/>
+    <rect x="758" y="430" width="36"  height="164" rx="18"/>
+    <rect x="820" y="475" width="36"  height="74"  rx="18"/>
+  </g>
+
+  <!-- Hangul ㅇ (initial of "음차" = transliteration) sitting on top of waveform peak -->
+  <circle cx="528" cy="520" r="78" fill="none" stroke="#FFFFFF" stroke-width="22"/>
+</svg>

@@ -1,0 +1,8 @@
+namespace ais_ffi {
+    /// Transliterate a sentence in any supported language into Korean Hangul phonetics.
+    /// Returns the input unchanged when the dominant script is Hangul / CJK / Arabic / unknown.
+    string transliterate(string text);
+
+    /// Library version string (Cargo package version).
+    string version();
+};

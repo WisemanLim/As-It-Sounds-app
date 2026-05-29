@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Android adaptive icon foreground (108dp logical, 432px nominal canvas with 33% safe zone). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 432 432">
+  <g fill="#4F8DFF">
+    <rect x="78"  y="195" width="16" height="42"  rx="8"/>
+    <rect x="104" y="172" width="16" height="88"  rx="8"/>
+    <rect x="130" y="148" width="16" height="136" rx="8"/>
+    <rect x="156" y="118" width="16" height="196" rx="8"/>
+    <rect x="182" y="88"  width="16" height="256" rx="8"/>
+    <rect x="208" y="60"  width="16" height="312" rx="8"/>
+    <rect x="234" y="88"  width="16" height="256" rx="8"/>
+    <rect x="260" y="118" width="16" height="196" rx="8"/>
+    <rect x="286" y="148" width="16" height="136" rx="8"/>
+    <rect x="312" y="172" width="16" height="88"  rx="8"/>
+    <rect x="338" y="195" width="16" height="42"  rx="8"/>
+  </g>
+  <circle cx="216" cy="220" r="36" fill="none" stroke="#FFFFFF" stroke-width="10"/>
+</svg>

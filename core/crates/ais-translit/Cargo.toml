@@ -1,0 +1,13 @@
+[package]
+name = "ais-translit"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Multilingual phonetic transliteration to Korean Hangul. Re-exports the desktop crate's translit module via #[path]."
+
+[lib]
+name = "ais_translit"
+crate-type = ["rlib"]
+
+[dependencies]
+once_cell = { workspace = true }

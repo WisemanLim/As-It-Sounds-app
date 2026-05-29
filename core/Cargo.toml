@@ -1,0 +1,23 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/ais-translit",
+    "crates/ais-ffi",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["As It Sounds"]
+license = "MIT"
+repository = "https://github.com/WisemanLim/As-It-Sounds"
+
+[workspace.dependencies]
+once_cell = "1"
+uniffi = { version = "0.28", default-features = false }
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = "debuginfo"
+opt-level = "z"

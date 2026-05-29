@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">As It Sounds</string>
+
+    <!-- 탭 -->
+    <string name="tab_transcribe">변환</string>
+    <string name="tab_library">보관함</string>
+    <string name="tab_translit">음차</string>
+    <string name="tab_settings">설정</string>
+
+    <!-- 변환 화면 -->
+    <string name="pipeline_title">변환</string>
+    <string name="pipeline_model_title">Whisper 모델</string>
+    <string name="pipeline_model_download">ggml-%1$s.bin 다운로드</string>
+    <string name="pipeline_translator_title">번역</string>
+    <string name="pipeline_file_title">음성 / 영상</string>
+    <string name="pipeline_file_pick">파일 선택…</string>
+    <string name="pipeline_run">변환 시작</string>
+    <string name="pipeline_stage_decoding">디코딩 중…</string>
+    <string name="pipeline_stage_asr">음성 인식 중…</string>
+    <string name="pipeline_stage_translit">음차 변환 중…</string>
+    <string name="pipeline_stage_translating">번역 중 %1$d/%2$d…</string>
+    <string name="pipeline_stage_done">완료 — 세그먼트 %1$d</string>
+    <string name="pipeline_stage_failed">실패 — %1$s</string>
+    <string name="pipeline_segments_count">세그먼트 (%1$d)</string>
+    <string name="pipeline_open_player">재생기 + 하이라이트 열기</string>
+
+    <!-- 내보내기 -->
+    <string name="export_title">내보내기</string>
+    <string name="export_save_as">.%1$s 로 저장</string>
+
+    <!-- 보관함 -->
+    <string name="library_title">보관함</string>
+    <string name="library_new">새 프로젝트</string>
+    <string name="library_empty">아직 프로젝트 없음.</string>
+    <string name="library_open">열기</string>
+    <string name="library_back">뒤로</string>
+    <string name="library_detail_empty">파일 없음. Transcribe 탭에서 변환하면 자동으로 여기 저장.</string>
+
+    <!-- Translit -->
+    <string name="translit_input">영어 / 프랑스어 / 일본어 / …</string>
+    <string name="translit_button">음차 변환</string>
+    <string name="translit_output">한글 음차</string>
+    <string name="translit_core_v">Core v%1$s</string>
+    <string name="translit_whisper_title">Whisper 백엔드</string>
+
+    <!-- 설정 -->
+    <string name="settings_title">설정</string>
+    <string name="settings_model">Whisper 모델</string>
+    <string name="settings_translator">기본 번역 엔진</string>
+    <string name="settings_dark_mode">다크 모드</string>
+    <string name="settings_dark_mode_auto">시스템</string>
+    <string name="settings_dark_mode_on">항상 켜기</string>
+    <string name="settings_dark_mode_off">항상 끄기</string>
+    <string name="settings_about">정보</string>
+    <string name="settings_version">버전</string>
+    <string name="settings_licenses">오픈소스 라이선스</string>
+    <string name="settings_data_clear">캐시 비우기</string>
+    <string name="settings_data_usage">저장 공간 사용량</string>
+
+    <!-- 접근성 -->
+    <string name="a11y_segment_row">세그먼트 %1$d, 시작 %2$s, 영어 %3$s, 한글 %4$s.</string>
+    <string name="a11y_translator_picker">번역 엔진</string>
+    <string name="a11y_model_download">Whisper 모델 다운로드</string>
+    <string name="a11y_pipeline_run">변환 시작</string>
+    <string name="a11y_player_seek">%1$s 로 이동</string>
+</resources>
