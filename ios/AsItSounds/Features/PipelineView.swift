@@ -228,7 +228,19 @@ struct PipelineView: View {
         Task {
             await runner.run(modelPath: modelURL.path, audioURL: audioURL, translator: translator)
             if var f = file {
-                f.status = .done
+                switch runner.stage {
+                case .done where !runner.segments.isEmpty:
+                    f.status = .done
+                case .done:
+                    f.status = .error
+                    f.error = "No segments produced (empty transcription)"
+                case .failed(let msg):
+                    f.status = .error
+                    f.error = msg
+                default:
+                    f.status = .error
+                    f.error = "Interrupted"
+                }
                 try? db.updateMediaFile(f)
             }
         }

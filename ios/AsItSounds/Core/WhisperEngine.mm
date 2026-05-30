@@ -68,7 +68,10 @@
     params.print_special    = false;
     params.print_timestamps = true;
     params.translate        = false;
-    params.detect_language  = (language == nil);
+    // NB: detect_language=true makes whisper_full EXIT right after detecting the
+    // language (no transcription). For auto-detect we must leave it false and
+    // pass language="auto" — detection then happens inline during transcription.
+    params.detect_language  = false;
     params.language         = language ? language.UTF8String : "auto";
     params.n_threads        = nThreads > 0 ? nThreads : 4;
     params.no_context       = true;

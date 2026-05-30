@@ -30,6 +30,7 @@
 		97E28390B0E52EF2DFAE42CE /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = D02C0251B3DF90B95D9A21FA /* GRDB */; };
 		9BA29147DE22F5466C711853 /* TranslitDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D747B9566610987EC548ED43 /* TranslitDemoView.swift */; };
 		9BB393C29BF7D6EBB395C941 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3D8904A68BFF28D86B51C4 /* RootView.swift */; };
+		A6055CA3B18C869014BBC219 /* Info.plist.bak in Resources */ = {isa = PBXBuildFile; fileRef = C3A3B5467A4BF71983368B03 /* Info.plist.bak */; };
 		B093FB0838BC4029C039EA49 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A281C463AD9E17A7F654F81 /* ModelManager.swift */; };
 		BFF09D623DCF4AD9C3DD33B0 /* WhisperEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83BB8050E05723977624249D /* WhisperEngine.mm */; };
 		D50BB2A4AD66B980CDE0F7F9 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB412B10DC8FAABAD23FF833 /* LibraryView.swift */; };
@@ -64,6 +65,7 @@
 		B639018F895C3A4F983DED2F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BEF1C26F399F7E271CB5B7EF /* LiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivity.swift; sourceTree = "<group>"; };
 		BF4C64B46A49EA1C0A57B7EE /* WhisperEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhisperEngine.h; sourceTree = "<group>"; };
+		C3A3B5467A4BF71983368B03 /* Info.plist.bak */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist.bak; sourceTree = "<group>"; };
 		C4AE53C78C6DA936615DC4D7 /* AudioDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDecoder.swift; sourceTree = "<group>"; };
 		CB412B10DC8FAABAD23FF833 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		CEEF76357E188E70A2F763DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				CEEF76357E188E70A2F763DC /* Assets.xcassets */,
+				C3A3B5467A4BF71983368B03 /* Info.plist.bak */,
 				4AFF67C7817C5E51BFDCABC1 /* Localizable.strings */,
 			);
 			path = Resources;
@@ -261,6 +264,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				406D9822B514B2D73FEEEBB1 /* Assets.xcassets in Resources */,
+				A6055CA3B18C869014BBC219 /* Info.plist.bak in Resources */,
 				8CA13EC0FA76A1C54D3C2B44 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -380,7 +384,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ALQEFZ23LN;
 				ENABLE_BASE_INTERNATIONALIZATION = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -413,7 +417,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ALQEFZ23LN;
 				ENABLE_BASE_INTERNATIONALIZATION = YES;
 				FRAMEWORK_SEARCH_PATHS = (

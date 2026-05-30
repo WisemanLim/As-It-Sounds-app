@@ -99,7 +99,12 @@ struct ProjectDetailView: View {
                             Text(f.displayName)
                             Text(f.status.rawValue)
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(f.status == .error ? Color.red : Color.secondary)
+                            if let e = f.error, !e.isEmpty {
+                                Text(e)
+                                    .font(.caption2)
+                                    .foregroundStyle(.red)
+                            }
                         }
                     }
                 }

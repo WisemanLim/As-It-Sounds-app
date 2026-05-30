@@ -1,5 +1,8 @@
 import Foundation
 import Observation
+import os
+
+private let aisLog = Logger(subsystem: "com.asitsounds.ios", category: "pipeline")
 
 /// One Whisper segment plus its Hangul transliteration. Korean translation
 /// will be filled in by a later phase once the Translator protocol lands.
@@ -46,9 +49,11 @@ public final class PipelineRunner {
         stage = .decoding
 
         // Hop the heavy work off the main actor.
+        aisLog.info("run start model=\(modelPath, privacy: .public) audio=\(audioURL.lastPathComponent, privacy: .public)")
         let result: Result<[PipelineSegment], Swift.Error> = await Task.detached(priority: .userInitiated) {
             do {
                 let pcm = try AudioDecoder.decodeToPCM16k(url: audioURL)
+                aisLog.notice("decoded PCM bytes=\(pcm.count) samples=\(pcm.count / 4)")
                 guard let engine = WhisperEngine(modelPath: modelPath, useGpu: true) else {
                     throw NSError(domain: "AisPipeline", code: 1, userInfo: [
                         NSLocalizedDescriptionKey: "WhisperEngine init failed"
@@ -57,6 +62,7 @@ public final class PipelineRunner {
                 var nsError: NSError?
                 let raw = engine.transcribePCM(pcm, language: language, nThreads: 4, onError: &nsError)
                 if let nsError { throw nsError }
+                aisLog.notice("whisper segments=\(raw.count)")
 
                 var out: [PipelineSegment] = []
                 out.reserveCapacity(raw.count)
@@ -98,10 +104,17 @@ public final class PipelineRunner {
                                   textEn: $0.textEn, textHangul: $0.textHangul,
                                   textKo: $0.textKo.isEmpty ? nil : $0.textKo)
                 }
-                try? AppDatabase.shared.saveSegments(recs, fileId: persistFileId)
+                do {
+                    try AppDatabase.shared.saveSegments(recs, fileId: persistFileId)
+                    aisLog.info("persisted \(recs.count) segments file=\(persistFileId, privacy: .public)")
+                } catch {
+                    aisLog.error("saveSegments failed: \(error.localizedDescription, privacy: .public)")
+                }
             }
+            aisLog.notice("run done segments=\(segs.count)")
             stage = .done
         case .failure(let err):
+            aisLog.error("run failed: \(err.localizedDescription, privacy: .public)")
             stage = .failed(err.localizedDescription)
         }
     }

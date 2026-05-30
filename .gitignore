@@ -90,6 +90,7 @@ android/local.properties
 # Xcode derived data + per-user state
 ios/.dd/
 ios/.dd-real/
+ios/.dd-device/
 ios/.swiftpm/
 ios/build/
 ios/DerivedData/
