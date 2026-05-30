@@ -1,36 +1,38 @@
 # Store metadata — As It Sounds
 
-Copy/paste ready for App Store Connect + Google Play Console.
+> 🌐 **한국어** · [English](store-metadata.en.md)
+
+App Store Connect + Google Play Console에 바로 붙여넣기 가능한 스토어 메타데이터.
 
 ## App Store Connect
 
-### Identity
+### 기본 정보
 
 - **Bundle ID** — `com.asitsounds.ios`
 - **SKU** — `as-it-sounds-ios`
-- **Primary category** — Education
-- **Secondary category** — Productivity
-- **Content rating** — 4+ (no objectionable content)
-- **Price** — Free + non-consumable IAP (Phase 2: model unlock)
+- **주 카테고리** — Education
+- **부 카테고리** — Productivity
+- **연령 등급** — 4+ (부적절한 콘텐츠 없음)
+- **가격** — 무료 + 비소모성 IAP (Phase 2: 모델 잠금 해제)
 
-### Localized listings
+### 현지화 스토어 목록
 
-#### en — App name
+#### en — 앱 이름
 
 `As It Sounds`
 
-#### en — Subtitle (≤30 chars)
+#### en — 부제 (≤30자)
 
 `Hear it. Read it in Hangul.`
 
-#### en — Promotional text (≤170 chars)
+#### en — 프로모션 텍스트 (≤170자)
 
 ```
 Transcribe English, Japanese, French, Spanish, German or Russian audio
 to Hangul exactly as it sounds, plus Korean translation — all on device.
 ```
 
-#### en — Description
+#### en — 설명
 
 ```
 As It Sounds turns any audio or video into Korean Hangul that mirrors
@@ -62,13 +64,13 @@ PRIVACY
 We collect zero data. No analytics, no tracking, no account.
 ```
 
-#### en — Keywords (≤100 chars, comma-separated)
+#### en — 키워드 (≤100자, 쉼표 구분)
 
 `hangul,korean,whisper,transcribe,phonetic,translit,subtitle,srt,english,japanese`
 
-#### en — Support URL / Marketing URL
+#### en — 지원 URL / 마케팅 URL
 
-Replace with the project's actual URLs before submission.
+제출 전 실제 프로젝트 URL로 교체하세요.
 
 #### ko — 앱 이름
 
@@ -115,56 +117,53 @@ LibreTranslate 를 선택적으로 사용할 수 있습니다.
 수집하는 데이터 0. 분석·트래킹·계정 없음.
 ```
 
-### Privacy
+### 개인정보 보호
 
-App privacy form answers:
+앱 개인정보 보호 양식 답변:
 
-- **Contact info** — Not collected
-- **Health & fitness** — Not collected
-- **Financial info** — Not collected
-- **Location** — Not collected
-- **Sensitive info** — Not collected
-- **Contacts** — Not collected
-- **User content (photos, audio)** — Not collected. (Audio is read into memory and
-  written to the app's container; never leaves the device unless the user
-  explicitly enables LibreTranslate/DeepL.)
-- **Browsing history** — Not collected
-- **Search history** — Not collected
-- **Identifiers** — Not collected
-- **Purchases** — N/A until IAP ships
-- **Usage data** — Not collected
-- **Diagnostics** — Optional (Crash logs only, not linked, not for tracking)
-- **Other data** — Not collected
+- **연락처 정보** — 수집 안 함
+- **건강 및 피트니스** — 수집 안 함
+- **금융 정보** — 수집 안 함
+- **위치** — 수집 안 함
+- **민감한 정보** — 수집 안 함
+- **연락처** — 수집 안 함
+- **사용자 콘텐츠 (사진, 오디오)** — 수집 안 함. (오디오는 메모리로 읽혀 앱 컨테이너에 기록되며, 사용자가 LibreTranslate/DeepL을 명시적으로 활성화하지 않는 한 기기 밖으로 나가지 않습니다.)
+- **브라우징 기록** — 수집 안 함
+- **검색 기록** — 수집 안 함
+- **식별자** — 수집 안 함
+- **구매 정보** — IAP 출시 전까지 해당 없음
+- **사용 데이터** — 수집 안 함
+- **진단** — 선택적 (크래시 로그만, 미연결, 추적 목적 아님)
+- **기타 데이터** — 수집 안 함
 
-### Required disclosures
+### 필수 공개 사항
 
-- **Export compliance** — Uses standard encryption (HTTPS to translation API
-  only). Eligible for the App Store "exempt" path.
-- **Encryption** — Yes (TLS only).
-- **Third-party data use** — None.
+- **수출 규정 준수** — 표준 암호화 사용 (번역 API에 HTTPS만). App Store "exempt" 경로 해당.
+- **암호화** — 예 (TLS만).
+- **제3자 데이터 사용** — 없음.
 
 ---
 
 ## Google Play Console
 
-### Identity
+### 기본 정보
 
 - **Application ID** — `com.asitsounds.android`
-- **Primary category** — Education
-- **Tags** — Productivity, Languages, Subtitles
-- **Content rating** — Everyone (IARC)
+- **주 카테고리** — Education
+- **태그** — Productivity, Languages, Subtitles
+- **연령 등급** — Everyone (IARC)
 
-### Store listing (en-US)
+### 스토어 목록 (en-US)
 
-#### App title (≤30 chars)
+#### 앱 제목 (≤30자)
 
 `As It Sounds`
 
-#### Short description (≤80 chars)
+#### 짧은 설명 (≤80자)
 
 `Hear it. Read it in Hangul. On-device Whisper + Korean translation.`
 
-#### Full description (≤4000 chars)
+#### 전체 설명 (≤4000자)
 
 ```
 As It Sounds turns any audio or video into Korean Hangul that mirrors
@@ -197,7 +196,7 @@ Privacy
 We collect zero data. No analytics, no tracking, no account.
 ```
 
-### Localized — ko-KR
+### 현지화 — ko-KR
 
 #### 앱 제목
 
@@ -209,34 +208,33 @@ We collect zero data. No analytics, no tracking, no account.
 
 #### 자세한 설명
 
-(Use ko description from App Store Connect above.)
+(위 App Store Connect의 ko 설명을 사용하세요.)
 
-### Data safety (Play Console form)
+### 데이터 보안 (Play Console 양식)
 
-- **Does your app collect or share any of the required user data types?** — No
-- **Is all of the user data collected by your app encrypted in transit?** — Yes
-- **Do you provide a way for users to request that their data be deleted?** — N/A
-  (no data collected)
+- **앱이 필수 사용자 데이터 유형을 수집하거나 공유합니까?** — 아니요
+- **앱에서 수집하는 모든 사용자 데이터가 전송 중에 암호화됩니까?** — 예
+- **사용자가 데이터 삭제를 요청할 수 있는 방법을 제공합니까?** — 해당 없음 (수집하는 데이터 없음)
 
-### Permissions justification
+### 권한 사용 이유
 
-| Permission | Why we need it |
+| 권한 | 필요 이유 |
 | :-- | :-- |
-| `RECORD_AUDIO` | Live recording (Phase 3 feature) — declared in advance |
-| `READ_MEDIA_AUDIO` / `READ_MEDIA_VIDEO` | User-picked file import via PhotoPicker |
-| `POST_NOTIFICATIONS` | Foreground service progress notification |
-| `FOREGROUND_SERVICE_MEDIA_PROCESSING` | Required type for background transcription on API 34+ |
-| `INTERNET` | Optional translator API + first-run Whisper model download |
+| `RECORD_AUDIO` | 실시간 녹음 (Phase 3 기능) — 사전 선언 |
+| `READ_MEDIA_AUDIO` / `READ_MEDIA_VIDEO` | PhotoPicker를 통한 사용자 파일 가져오기 |
+| `POST_NOTIFICATIONS` | 포그라운드 서비스 진행 알림 |
+| `FOREGROUND_SERVICE_MEDIA_PROCESSING` | API 34 이상에서 백그라운드 전사에 필요한 서비스 유형 |
+| `INTERNET` | 선택적 번역 API + 최초 실행 시 Whisper 모델 다운로드 |
 
-### Content rating questionnaire (IARC)
+### 콘텐츠 등급 설문 (IARC)
 
-- Violence — None
-- Sex / nudity — None
-- Profanity — None
-- Drugs / alcohol / tobacco — None
-- Simulated gambling — None
-- User-generated content / chat — None
-- Location sharing — None
-- Personal info sharing — None
+- 폭력 — 없음
+- 성적 콘텐츠 / 노출 — 없음
+- 비속어 — 없음
+- 마약 / 알코올 / 담배 — 없음
+- 모의 도박 — 없음
+- 사용자 생성 콘텐츠 / 채팅 — 없음
+- 위치 공유 — 없음
+- 개인정보 공유 — 없음
 
-Result: **Everyone**.
+결과: **Everyone**.

@@ -1,105 +1,107 @@
-# Environment setup — As It Sounds (mobile)
+# 환경 설정 — As It Sounds (모바일)
 
-This is what the Phase-0 scaffold expects on your machine, in dependency order. Items marked **automated** are already taken care of by the build scripts; the rest you do once.
+> 🌐 **한국어** · [English](ENV-setup.en.md)
 
-## Already verified ✅
+Phase-0 스캐폴드가 머신에 요구하는 항목을 의존성 순서대로 정리한 문서입니다. **자동화됨**으로 표시된 항목은 빌드 스크립트가 처리하며, 나머지는 한 번만 수동으로 설정합니다.
 
-| Tool | Version | Path |
+## 이미 확인됨 ✅
+
+| 도구 | 버전 | 경로 |
 | :-- | :-- | :-- |
-| Rust toolchain | 1.95+ | `~/.cargo/bin/cargo` |
-| iOS Rust targets | aarch64 / aarch64-sim / x86_64 | installed |
-| Android Rust targets | aarch64 / armv7 / x86_64 / i686 (-linux-android) | installed |
+| Rust 툴체인 | 1.95+ | `~/.cargo/bin/cargo` |
+| iOS Rust 타겟 | aarch64 / aarch64-sim / x86_64 | 설치됨 |
+| Android Rust 타겟 | aarch64 / armv7 / x86_64 / i686 (-linux-android) | 설치됨 |
 | Swift | 6.3 | `/usr/bin/swift` |
-| macOS SDK | 26.0 | bundled with CommandLineTools |
-| Android SDK base | — | `~/Library/Android/sdk` |
+| macOS SDK | 26.0 | CommandLineTools에 번들 포함 |
+| Android SDK 기본 | — | `~/Library/Android/sdk` |
 
-## Action required ⏳
+## 조치 필요 ⏳
 
-### A. Switch `xcode-select` to Xcode.app (needed for iOS SDK)
+### A. `xcode-select`를 Xcode.app으로 전환 (iOS SDK에 필요)
 
 ```bash
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
-xcode-select -p          # confirm
-xcodebuild -version      # confirm
+xcode-select -p          # 확인
+xcodebuild -version      # 확인
 ```
 
-Without this, `xcrun --sdk iphoneos --show-sdk-path` fails and `cargo build --target aarch64-apple-ios` emits a linker warning. The build technically still produces `libais_ffi.a`, but you cannot build the Xcode app from it.
+이 단계를 건너뛰면 `xcrun --sdk iphoneos --show-sdk-path`가 실패하고 `cargo build --target aarch64-apple-ios` 실행 시 링커 경고가 발생합니다. 빌드 자체는 `libais_ffi.a`를 생성하지만, 해당 파일로 Xcode 앱을 빌드할 수 없습니다.
 
-### B. Install xcodegen (project generator)
+### B. xcodegen 설치 (프로젝트 생성기)
 
 ```bash
 brew install xcodegen
 xcodegen --version
 ```
 
-We use yaml (`ios/project.yml`) instead of checking in `.xcodeproj`, which is generated. No merge conflicts on a binary file.
+`.xcodeproj`를 직접 커밋하는 대신 yaml 파일(`ios/project.yml`)을 사용하며, `.xcodeproj`는 생성됩니다. 바이너리 파일의 머지 충돌이 발생하지 않습니다.
 
-### C. Install Android NDK + command-line tools
+### C. Android NDK + 커맨드라인 도구 설치
 
-Easiest via Android Studio:
+Android Studio를 통한 설치가 가장 간편합니다:
 
-1. Open **Android Studio → Settings → Languages & Frameworks → Android SDK → SDK Tools** tab
-2. Check ✓ on these and click Apply:
-   - **NDK (Side by side)** → pick the latest (r27 or newer)
+1. **Android Studio → Settings → Languages & Frameworks → Android SDK → SDK Tools** 탭 열기
+2. 다음 항목을 체크 ✓ 하고 Apply 클릭:
+   - **NDK (Side by side)** → 최신 버전 선택 (r27 이상)
    - **CMake**
    - **Android SDK Command-line Tools (latest)**
 
-Or via `sdkmanager` if you already have command-line tools:
+이미 커맨드라인 도구가 설치된 경우 `sdkmanager`로도 설치 가능합니다:
 
 ```bash
 sdkmanager --install "ndk;27.2.12479018" "cmake;3.30.5"
 ```
 
-Then export to your shell rc file:
+이후 셸 rc 파일에 다음을 추가합니다:
 
 ```bash
 export ANDROID_HOME="$HOME/Library/Android/sdk"
-export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/27.2.12479018"   # adjust to your version
+export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/27.2.12479018"   # 설치된 버전에 맞게 조정
 export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
 ```
 
-### D. Install cargo-ndk (Android cross-build helper)
+### D. cargo-ndk 설치 (Android 크로스 빌드 도우미)
 
-**Automated**: `core/scripts/build-android.sh` runs `cargo install --locked cargo-ndk` if it's missing. You can also do it explicitly:
+**자동화됨**: `core/scripts/build-android.sh`가 누락된 경우 `cargo install --locked cargo-ndk`를 자동 실행합니다. 명시적으로 직접 설치할 수도 있습니다:
 
 ```bash
 cargo install --locked cargo-ndk
 ```
 
-## Verifying the full chain
+## 전체 체인 검증
 
 ```bash
 cd As-It-Sounds-app/core
 
-# Host build + tests (no extra setup required, works today)
+# 호스트 빌드 + 테스트 (추가 설정 불필요, 현재 동작)
 cargo test --release
 # → "30 passed; 0 failed"
 
-# iOS cross-build (needs step A done)
+# iOS 크로스 빌드 (단계 A 완료 필요)
 ./scripts/build-ios.sh
-# → produces target/AisCoreFFI.xcframework
+# → target/AisCoreFFI.xcframework 생성
 
-# Android cross-build (needs steps C, D done)
+# Android 크로스 빌드 (단계 C, D 완료 필요)
 ./scripts/build-android.sh
-# → produces ../android/app/src/main/jniLibs/<abi>/libais_ffi.so for 4 ABIs
+# → ../android/app/src/main/jniLibs/<abi>/libais_ffi.so (4개 ABI) 생성
 ```
 
-## What each step unblocks
+## 각 단계가 해제하는 기능
 
-| Step | Unblocks |
+| 단계 | 해제되는 기능 |
 | :-- | :-- |
-| A — xcode-select | iOS SDK lookup, simulator / device builds, xcodebuild |
+| A — xcode-select | iOS SDK 조회, 시뮬레이터 / 디바이스 빌드, xcodebuild |
 | B — xcodegen | `ios/project.yml` → `ios/AsItSounds.xcodeproj` |
-| C — NDK + cmake | Android cross-compile, future whisper.cpp JNI |
-| D — cargo-ndk | One-shot multi-ABI Rust build for Android |
+| C — NDK + cmake | Android 크로스 컴파일, 향후 whisper.cpp JNI |
+| D — cargo-ndk | Android용 원샷 멀티 ABI Rust 빌드 |
 
-## Troubleshooting
+## 문제 해결
 
-| Symptom | Fix |
+| 증상 | 해결 방법 |
 | :-- | :-- |
-| `xcrun: error: SDK "iphoneos" cannot be located` | Run step A |
-| `xcodegen: command not found` | Run step B |
-| `ANDROID_NDK_HOME must be set` | Run step C |
-| `cargo-ndk: command not found` | Run step D |
-| `Cannot find module 'AisCoreFFI'` in Xcode | Run `core/scripts/build-ios.sh` first; then `xcodegen generate` again |
-| Compose import `com.asitsounds.core.transliterate` red | Run `core/scripts/build-android.sh` to emit the Kotlin binding into `app/src/main/java/com/asitsounds/core/` |
+| `xcrun: error: SDK "iphoneos" cannot be located` | 단계 A 실행 |
+| `xcodegen: command not found` | 단계 B 실행 |
+| `ANDROID_NDK_HOME must be set` | 단계 C 실행 |
+| `cargo-ndk: command not found` | 단계 D 실행 |
+| Xcode에서 `Cannot find module 'AisCoreFFI'` | `core/scripts/build-ios.sh` 먼저 실행 후 `xcodegen generate` 재실행 |
+| Compose에서 `com.asitsounds.core.transliterate` 임포트 빨간색 | `core/scripts/build-android.sh` 실행하여 Kotlin 바인딩을 `app/src/main/java/com/asitsounds/core/`에 생성 |

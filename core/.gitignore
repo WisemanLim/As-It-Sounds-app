@@ -1,9 +1,11 @@
-target/
+# Cargo build output — but KEEP the prebuilt xcframeworks Xcode links against,
+# so iOS builds straight from a clone.
+target/*
+!target/AisCoreFFI.xcframework
+!target/whisper.xcframework
 **/*.rs.bk
 Cargo.lock.bak
-bindings/swift/*.swift
-bindings/swift/*.h
-bindings/swift/*.modulemap
-bindings/kotlin/**/*.kt
-*.xcframework/
 .DS_Store
+
+# UniFFI-generated bindings (Swift + Kotlin) are COMMITTED for clone-and-build.
+# Regenerate with core/scripts/build-ios.sh / build-android.sh.

@@ -8,5 +8,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-app/src/main/jniLibs/
-app/src/main/java/com/asitsounds/core/
+
+# jniLibs/*.so and the UniFFI Kotlin binding (app/src/main/java/com/asitsounds/core/)
+# are COMMITTED so Android Studio builds straight from a clone.

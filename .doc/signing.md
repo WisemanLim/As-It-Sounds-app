@@ -1,22 +1,24 @@
 # Code signing — As It Sounds
 
-How to sign release builds for both stores. Local + CI paths.
+> 🌐 **한국어** · [English](signing.en.md)
+
+릴리즈 빌드에 서명하는 방법 (양쪽 스토어). 로컬 및 CI 경로.
 
 ## iOS — Apple Developer ID
 
-### Prerequisites
+### 사전 준비
 
-1. **Apple Developer Program** membership (paid, $99/yr).
-2. App ID `com.asitsounds.ios` registered in
-   [Certificates, IDs & Profiles](https://developer.apple.com/account/resources/identifiers/list).
-3. Distribution certificate (Apple Distribution) — keychain on the build host.
-4. Provisioning profile — App Store, includes the App ID + the cert.
+1. **Apple Developer Program** 멤버십 (유료, $99/년).
+2. App ID `com.asitsounds.ios` 를
+   [Certificates, IDs & Profiles](https://developer.apple.com/account/resources/identifiers/list)에 등록.
+3. 배포 인증서 (Apple Distribution) — 빌드 호스트의 키체인에 설치.
+4. 프로비저닝 프로파일 — App Store 용, App ID + 인증서 포함.
 
-### Local archive + notarize
+### 로컬 아카이브 + 공증
 
 ```bash
-# Required env. The TestFlight/notarize step uses an app-specific password
-# stored in the macOS keychain under the AC_PASSWORD label.
+# 필수 환경 변수. TestFlight/공증 단계에서 AC_PASSWORD 레이블로
+# macOS 키체인에 저장된 앱 전용 비밀번호를 사용합니다.
 export APPLE_SIGNING_IDENTITY="Apple Distribution: WISEMAN LIM (TEAMID)"
 export APPLE_ID="wiseman.lim@example.com"
 export APPLE_PASSWORD="@keychain:AC_PASSWORD"
@@ -51,7 +53,7 @@ xcodebuild -exportArchive \
 </plist>
 ```
 
-### TestFlight upload
+### TestFlight 업로드
 
 ```bash
 xcrun altool --upload-app -f build/export/AsItSounds.ipa \
@@ -59,23 +61,22 @@ xcrun altool --upload-app -f build/export/AsItSounds.ipa \
   --apiIssuer "$APP_STORE_CONNECT_ISSUER_ID"
 ```
 
-(`altool` is deprecated in favour of `notarytool` for notarization, and
-`xcrun altool` is being phased out for upload in favour of `Transporter`.
-For CI prefer the
-[App Store Connect API directly](https://developer.apple.com/documentation/appstoreconnectapi).)
+(`altool`은 공증 용도에서 `notarytool`로 대체 예정이며,
+업로드 용도의 `xcrun altool` 또한 `Transporter`로 단계적으로 교체되고 있습니다.
+CI에서는
+[App Store Connect API 직접 호출](https://developer.apple.com/documentation/appstoreconnectapi)을 권장합니다.)
 
 ---
 
 ## Android — Play App Signing
 
-Upload key is held by the developer; Play re-signs with its own app signing
-key on the server.
+업로드 키는 개발자가 보관하며, Play가 서버에서 자체 앱 서명 키로 재서명합니다.
 
-### One-time setup
+### 최초 설정
 
 ```bash
-# Generate the upload keystore. KEEP THE PASSWORDS — Play will not let you
-# rotate the key without contacting support.
+# 업로드 키스토어 생성. 비밀번호를 반드시 보관하세요 —
+# 지원팀에 문의하지 않으면 키를 교체할 수 없습니다.
 keytool -genkey -v \
   -keystore android/upload-keystore.jks \
   -keyalg RSA -keysize 4096 -validity 36500 \
@@ -85,7 +86,7 @@ keytool -genkey -v \
   -dname "CN=As It Sounds, OU=Mobile, O=As It Sounds, L=Seoul, C=KR"
 ```
 
-Add to `~/.gradle/gradle.properties` (or to CI secrets, never commit):
+`~/.gradle/gradle.properties` 에 추가하거나 CI 시크릿으로 설정하세요 (절대 커밋 금지):
 
 ```properties
 AIS_UPLOAD_STORE_FILE=/abs/path/to/upload-keystore.jks
@@ -94,9 +95,9 @@ AIS_UPLOAD_KEY_ALIAS=asitsounds-upload
 AIS_UPLOAD_KEY_PASSWORD=...
 ```
 
-### `android/app/build.gradle.kts` — release signing
+### `android/app/build.gradle.kts` — 릴리즈 서명 설정
 
-Add inside the `android { ... }` block:
+`android { ... }` 블록 안에 추가:
 
 ```kotlin
 signingConfigs {
@@ -121,7 +122,7 @@ buildTypes {
 }
 ```
 
-### Build an AAB
+### AAB 빌드
 
 ```bash
 cd android
@@ -129,38 +130,38 @@ cd android
 # → android/app/build/outputs/bundle/release/app-release.aab
 ```
 
-Upload via [Play Console](https://play.google.com/console) or the
-[Publisher API](https://developers.google.com/android-publisher).
+[Play Console](https://play.google.com/console) 또는
+[Publisher API](https://developers.google.com/android-publisher)를 통해 업로드하세요.
 
 ---
 
-## Secrets matrix (CI)
+## 시크릿 매트릭스 (CI)
 
-Drop these into the GitHub Actions repository secrets:
+GitHub Actions 저장소 시크릿에 다음 값들을 등록하세요:
 
 ### iOS
 
-| Secret | Source |
+| 시크릿 | 출처 |
 | :-- | :-- |
-| `APPLE_TEAM_ID` | Developer portal — Membership Details |
-| `APPLE_SIGNING_IDENTITY` | Full common name of the dist cert |
-| `APPLE_ID` | Your Apple ID email |
-| `APPLE_PASSWORD` | App-specific password generated at appleid.apple.com |
-| `APPLE_CERT_P12` | Base64 of `.p12` export of the signing cert |
-| `APPLE_CERT_P12_PASSWORD` | Password used during `.p12` export |
-| `APPLE_PROVISIONING_PROFILE` | Base64 of the App Store profile |
+| `APPLE_TEAM_ID` | 개발자 포털 — Membership Details |
+| `APPLE_SIGNING_IDENTITY` | 배포 인증서의 전체 Common Name |
+| `APPLE_ID` | Apple ID 이메일 |
+| `APPLE_PASSWORD` | appleid.apple.com에서 생성한 앱 전용 비밀번호 |
+| `APPLE_CERT_P12` | 서명 인증서 `.p12` 내보내기 파일의 Base64 |
+| `APPLE_CERT_P12_PASSWORD` | `.p12` 내보내기 시 설정한 비밀번호 |
+| `APPLE_PROVISIONING_PROFILE` | App Store 프로파일의 Base64 |
 | `APP_STORE_CONNECT_API_KEY_ID` | App Store Connect API |
 | `APP_STORE_CONNECT_ISSUER_ID` | App Store Connect API |
-| `APP_STORE_CONNECT_API_KEY` | Base64 of the `.p8` private key |
+| `APP_STORE_CONNECT_API_KEY` | `.p8` 개인 키의 Base64 |
 
 ### Android
 
-| Secret | Source |
+| 시크릿 | 출처 |
 | :-- | :-- |
 | `AIS_UPLOAD_KEYSTORE_BASE64` | `base64 -i upload-keystore.jks` |
-| `AIS_UPLOAD_STORE_PASSWORD` | One you set during `keytool -genkey` |
-| `AIS_UPLOAD_KEY_PASSWORD` | Same |
+| `AIS_UPLOAD_STORE_PASSWORD` | `keytool -genkey` 실행 시 설정한 값 |
+| `AIS_UPLOAD_KEY_PASSWORD` | 동일 |
 | `AIS_UPLOAD_KEY_ALIAS` | `asitsounds-upload` |
-| `PLAY_SERVICE_ACCOUNT_JSON` | JSON key for Play Developer API |
+| `PLAY_SERVICE_ACCOUNT_JSON` | Play Developer API용 JSON 키 |
 
-The `release.yml` workflow (next section) reads these and never logs them.
+`release.yml` 워크플로우(다음 섹션)가 이 값들을 읽으며, 로그에 절대 출력하지 않습니다.

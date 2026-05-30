@@ -1,5 +1,7 @@
 # As It Sounds — iPhone App PRD
 
+> 🌐 **한국어** · [English](PRD-for-iPhone.en.md)
+
 > 데스크탑/웹 (Tauri + Rust) 의 핵심 가치를 iOS-네이티브로 재구현. **Rust 코어 1713줄 translit + 음운 규칙 자산을 그대로 재사용**하는 게 핵심 전략.
 
 - **제품명(코드)**: `as-it-sounds-ios` (Bundle ID `com.asitsounds.ios`)

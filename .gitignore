@@ -1,4 +1,13 @@
-# ─── macOS ────────────────────────────────────────────────────────────────
+# =============================================================================
+# As It Sounds — Mobile .gitignore
+#
+# Policy: ignore ONLY real build outputs, machine-specific files, downloaded
+# models, and secrets. Everything required to `git clone` → open in Xcode /
+# Android Studio → build & run is committed (project files, generated bindings,
+# prebuilt xcframeworks, jniLibs, vendored whisper.cpp source + GRDB).
+# =============================================================================
+
+# ─── macOS ──────────────────────────────────────────────────────────────────
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -8,7 +17,7 @@ Icon?
 .Trashes
 .fseventsd
 
-# ─── Editors / IDEs ───────────────────────────────────────────────────────
+# ─── Editors / IDEs (per-user) ───────────────────────────────────────────────
 .vscode/
 .idea/
 *.iml
@@ -21,65 +30,63 @@ Icon?
 .omc/
 .claude/
 
-# ─── Common build / log artifacts ─────────────────────────────────────────
+# ─── Logs / scratch ──────────────────────────────────────────────────────────
 *.log
 *.tmp
 *.bak
 *.orig
 *.pid
 
-# Static analyst output — keep `.review/` committed (delete this line to ignore)
+# Keep `.review/` committed (analyst output). Uncomment to ignore:
 # .review/
 
-# ─── Rust workspace (core/) ───────────────────────────────────────────────
-core/target/
-core/**/target/
+# =============================================================================
+# Rust workspace (core/)
+# =============================================================================
+# Ignore the Cargo build dir, but KEEP the prebuilt xcframeworks that Xcode
+# links against (so iOS builds without running build-ios.sh first).
+core/target/*
+!core/target/AisCoreFFI.xcframework
+!core/target/whisper.xcframework
 **/*.rs.bk
-core/bindings/swift/
-core/bindings/kotlin/
-
-# whisper.cpp clone — huge upstream, fetched on demand by
-# core/scripts/fetch-whisper.sh (or manual git clone). Keep out of the repo.
-core/third_party/
-
-# ─── Rust env / debug ─────────────────────────────────────────────────────
 .cargo/
 
-# ─── Android ──────────────────────────────────────────────────────────────
+# Generated UniFFI bindings ARE committed (Swift + Kotlin) so the projects
+# compile straight from a clone. (Regenerate with build-ios.sh / build-android.sh.)
+
+# =============================================================================
+# whisper.cpp (vendored source under core/third_party/whisper.cpp)
+# =============================================================================
+# Source is committed so Android's CMake can compile libais_whisper.so on a
+# fresh clone. Ignore ONLY whisper's own build output dirs.
+core/third_party/whisper.cpp/build/
+core/third_party/whisper.cpp/build-*/
+core/third_party/**/cmake-build-*/
+
+# =============================================================================
+# Android
+# =============================================================================
 android/build/
 android/.gradle/
 android/.cxx/
 android/app/build/
 android/app/.cxx/
 android/captures/
-android/local.properties
-android/.kotlin/
-
-# Generated JNI native libs (re-emitted by core/scripts/build-android.sh)
-android/app/src/main/jniLibs/
-
-# UniFFI-generated Kotlin binding (re-emitted by build-android.sh)
-android/app/src/main/java/com/asitsounds/core/
-
-# Gradle wrapper jar — leave the .properties + gradlew committed,
-# but `gradle/wrapper/gradle-wrapper.jar` is binary; let `gradle wrapper`
-# regenerate it on first sync.
-android/gradle/wrapper/gradle-wrapper.jar
-
-# Room/SQLDelight schema exports (if Phase 3.5 KMM adds Room back)
 android/app/schemas/
-
-# Android Studio per-user
+android/app/release/
 android/.idea/
 android/*.iml
+android/.kotlin/
 
-# Build outputs
-android/app/release/
+# Machine-specific — Android Studio regenerates on first sync.
+android/local.properties
 
-# ─── iOS ──────────────────────────────────────────────────────────────────
-# xcodegen regenerates the project file — never commit it.
-ios/AsItSounds.xcodeproj/
+# NOTE: gradle-wrapper.jar, jniLibs/*.so, and the UniFFI Kotlin binding
+# (com/asitsounds/core/) are now COMMITTED for clone-and-build.
 
+# =============================================================================
+# iOS
+# =============================================================================
 # Xcode derived data + per-user state
 ios/.dd/
 ios/.dd-real/
@@ -90,52 +97,42 @@ ios/**/xcuserdata/
 ios/**/*.xcuserdatad/
 ios/**/project.xcworkspace/xcuserdata/
 
-# Local SwiftPM clone of GRDB (paren-path workaround). Re-clone via:
-#   git clone --depth 1 --branch v6.29.3 \
-#     https://github.com/groue/GRDB.swift ios/packages/GRDB
-ios/packages/
-
-# SwiftPM resolved/state files
+# SwiftPM resolved/state
 ios/Package.resolved
 ios/**/*.xcworkspace/xcshareddata/swiftpm/Package.resolved
 
-# Built whisper/AisCore xcframeworks (regenerated by core/scripts/build-ios.sh
-# + assemble-whisper-xcframework.sh)
-core/target/AisCoreFFI.xcframework/
-core/target/whisper.xcframework/
-core/target/whisper-ios-device/
-core/target/whisper-ios-sim/
-core/target/lipo-ios-sim/
+# Vendored GRDB source IS committed (paren-path workaround). Ignore only its
+# build cache.
+ios/packages/**/.build/
 
-# Build intermediate dirs from whisper.cpp's build-xcframework.sh
-# (lives under core/third_party/whisper.cpp/build-* which is already
-# ignored via core/third_party/, but keep the explicit globs for clarity.)
-core/third_party/whisper.cpp/build-*/
+# NOTE: ios/AsItSounds.xcodeproj and ios/packages/GRDB are now COMMITTED.
 
-# Archives, IPAs
+# Archives / IPAs / symbols (build outputs)
 *.xcarchive/
 *.ipa
 *.app.dSYM.zip
 
-# CocoaPods (not used today, but pre-emptively ignored)
+# CocoaPods / Carthage (unused, pre-emptive)
 Pods/
 Podfile.lock
-
-# Carthage (not used)
 Carthage/Build/
 
-# fastlane (when added)
+# fastlane
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/
 fastlane/test_output/
 
-# ─── Whisper models (downloaded at runtime, never committed) ──────────────
+# =============================================================================
+# Whisper models (downloaded at runtime / test fixtures — never committed)
+# =============================================================================
 *.bin
 ggml-*.mlmodelc/
 ggml-*.bin.part
 
-# ─── Secrets — must never be committed ────────────────────────────────────
+# =============================================================================
+# Secrets — must NEVER be committed
+# =============================================================================
 .env
 .env.*
 !.env.example
@@ -148,25 +145,14 @@ ggml-*.bin.part
 android/app/upload-keystore.jks
 ios/AsItSounds/GoogleService-Info.plist
 android/app/google-services.json
-
-# Apple App Store Connect API keys
 AuthKey_*.p8
 
-# ─── CI scratch ───────────────────────────────────────────────────────────
+# =============================================================================
+# Misc
+# =============================================================================
 .cache/
 node_modules/
-
-# ─── Asset generator outputs (regenerated by assets/generate-icons.sh) ────
-# Keep res/mipmap-*/*.png + AppIcon-1024.png committed — they're product
-# artifacts and stable. If you'd rather regen on every build, uncomment:
-# android/app/src/main/res/mipmap-*/ic_launcher*.png
-# ios/AsItSounds/Resources/Assets.xcassets/AppIcon.appiconset/Icon-1024.png
-
-# ─── Misc ─────────────────────────────────────────────────────────────────
-# CMake user files
 CMakeUserPresets.json
-
-# Generated SBOMs (regenerated in CI)
 bom.json
 bom.xml
 sbom.spdx.json

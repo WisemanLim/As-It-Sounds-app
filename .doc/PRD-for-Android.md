@@ -1,4 +1,6 @@
-# As It Sounds — Android App PRD
+# As It Sounds — Android 앱 PRD
+
+> 🌐 **한국어** · [English](PRD-for-Android.en.md)
 
 > 데스크탑/웹 (Tauri + Rust) 의 핵심 가치를 Android-네이티브로 재구현. **Rust 코어 1713줄 translit + 음운 규칙 자산을 그대로 재사용**하는 게 핵심 전략 (iOS PRD 와 동일).
 
@@ -579,13 +581,13 @@ sealed class AisError : Throwable() {
 | :-- | :-- | :-- |
 | `androidx.compose.bom` | Compose | Apache-2 |
 | `androidx.lifecycle:lifecycle-viewmodel-compose` | VM | Apache-2 |
-| `androidx.navigation:navigation-compose` | Nav | Apache-2 |
-| `androidx.hilt:hilt-navigation-compose` + `com.google.dagger:hilt-android` | DI | Apache-2 |
+| `androidx.navigation:navigation-compose` | 네비게이션 | Apache-2 |
+| `androidx.hilt:hilt-navigation-compose` + `com.google.dagger:hilt-android` | 의존성 주입 | Apache-2 |
 | `androidx.room:room-runtime` + `room-ktx` + `room-compiler` | SQLite | Apache-2 |
 | `androidx.work:work-runtime-ktx` | WorkManager | Apache-2 |
 | `androidx.media3:media3-exoplayer` + `media3-ui-compose` | 미디어 | Apache-2 |
 | `androidx.datastore:datastore-preferences` | 설정 | Apache-2 |
-| `androidx.security:security-crypto` | Encrypted prefs | Apache-2 |
+| `androidx.security:security-crypto` | 암호화 prefs | Apache-2 |
 | `com.google.mlkit:translate` | ML Kit Translation | Google ToS |
 | `com.squareup.okhttp3:okhttp` + `logging-interceptor` | HTTP | Apache-2 |
 | `com.squareup.retrofit2:retrofit` + `converter-moshi` | REST | Apache-2 |

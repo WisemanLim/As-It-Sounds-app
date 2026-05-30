@@ -1,24 +1,25 @@
-# Live Activity + Widget Extension setup
+# Live Activity + Widget Extension 설정
 
-The `LiveActivity.swift` file in the main app declares the `Attributes`
-struct only. iOS requires the *rendering* of a Live Activity to live in a
-separate **Widget Extension** target.
+> 🌐 **한국어** · [English](live-activity.en.md)
 
-## One-time Xcode setup (cannot be automated via xcodegen alone)
+메인 앱의 `LiveActivity.swift` 파일은 `Attributes` 구조체만 선언합니다.
+iOS는 Live Activity의 *렌더링*을 별도의 **Widget Extension** 타겟에 위치시키도록 요구합니다.
 
-1. **Add Widget Extension target**
+## 일회성 Xcode 설정 (xcodegen만으로는 자동화 불가)
+
+1. **Widget Extension 타겟 추가**
    - Xcode → `File` → `New` → `Target…`
    - Widget Extension (iOS)
    - Product name: `AsItSoundsLiveActivity`
    - Bundle ID: `com.asitsounds.ios.liveactivity`
    - ✅ "Include Live Activity"
-   - Add to project `AsItSounds`, embed in app
+   - 프로젝트 `AsItSounds`에 추가하고 앱에 embed
 
-2. **Share `TranscribeActivityAttributes`**
-   - Right-click `Core/LiveActivity.swift` → File Inspector
-   - Target Membership → add `AsItSoundsLiveActivity`
+2. **`TranscribeActivityAttributes` 공유**
+   - `Core/LiveActivity.swift` 우클릭 → File Inspector
+   - Target Membership → `AsItSoundsLiveActivity` 추가
 
-3. **Replace the auto-generated widget**
+3. **자동 생성된 위젯 교체**
 
 ```swift
 import ActivityKit
@@ -69,18 +70,18 @@ struct AsItSoundsLiveActivityBundle: WidgetBundle {
 }
 ```
 
-4. **Enable Live Activities in `Info.plist`**
+4. **`Info.plist`에서 Live Activities 활성화**
 
-Add to the *main app* Info.plist:
+*메인 앱*의 Info.plist에 추가:
 
 ```xml
 <key>NSSupportsLiveActivities</key>
 <true/>
 ```
 
-5. **Call from the pipeline**
+5. **파이프라인에서 호출**
 
-`PipelineRunner.run(...)` can start/update/end the activity:
+`PipelineRunner.run(...)`으로 액티비티를 시작/업데이트/종료할 수 있습니다:
 
 ```swift
 LiveActivityCoordinator.start(
@@ -95,20 +96,19 @@ await LiveActivityCoordinator.update(phase: "transcribing", progress: 0.4,
 await LiveActivityCoordinator.end()
 ```
 
-## Why not include the extension target in xcodegen now
+## 현재 xcodegen에 extension 타겟을 포함하지 않는 이유
 
-`project.yml` *can* declare a second target with `type: app-extension`, but
-the Widget Extension also needs:
+`project.yml`은 `type: app-extension`으로 두 번째 타겟을 선언할 수 *있지만*,
+Widget Extension에는 다음이 추가로 필요합니다:
 
-- A separate `Info.plist` with `NSExtension` keys
-- A separate entitlements file with the App Group identifier
-- The matching App Group capability on the main app
+- `NSExtension` 키가 있는 별도의 `Info.plist`
+- App Group 식별자가 있는 별도의 entitlements 파일
+- 메인 앱의 매칭되는 App Group capability
 
-These are usually wired in Xcode once and never touched again. Adding them
-to `project.yml` before they're verified by hand in Xcode tends to produce
-"Frameworks/AsItSounds.app/PlugIns/AsItSoundsLiveActivity.appex
-doesn't have a valid Info.plist" runtime errors that are easier to debug
-by clicking through Xcode.
+이 항목들은 보통 Xcode에서 한 번 설정하고 다시 건드리지 않습니다. Xcode에서 직접
+검증하기 전에 `project.yml`에 추가하면 다음과 같은 런타임 오류가 발생하기 쉬우며,
+Xcode를 통해 클릭하면서 디버깅하는 편이 더 수월합니다:
+`"Frameworks/AsItSounds.app/PlugIns/AsItSoundsLiveActivity.appex
+doesn't have a valid Info.plist"`
 
-Add to `project.yml` only after the manual setup is proven to work in a
-local Debug build.
+로컬 Debug 빌드에서 수동 설정이 정상 동작하는 것을 확인한 후에만 `project.yml`에 추가하세요.

@@ -1,35 +1,34 @@
-# KMM (Kotlin Multiplatform) migration plan
+# KMM (Kotlin Multiplatform) 마이그레이션 계획
 
-Phase 3.5 goal: consolidate the *non-UI* business logic between iOS and
-Android so a single Kotlin source of truth replaces today's Swift + Kotlin
-duplicate. The Rust translit core stays — only Kotlin↔Swift duplicated
-business code moves.
+> 🌐 **한국어** · [English](kmm-migration.en.md)
 
-## What moves to `shared/commonMain`
+Phase 3.5 목표: iOS와 Android 간의 *비-UI* 비즈니스 로직을 통합하여, 현재 Swift + Kotlin으로 중복된 코드를 단일 Kotlin 소스로 대체하는 것이다. Rust 변환 코어는 유지되며, Kotlin↔Swift 중복 비즈니스 코드만 이동한다.
 
-| Module today | Phase 3.5 destination | Note |
+## `shared/commonMain`으로 이동할 항목
+
+| 현재 모듈 | Phase 3.5 이동 위치 | 비고 |
 | :-- | :-- | :-- |
-| `Translator.kt` + `Translator.swift` | `shared/commonMain/Translator.kt` | Ktor client replaces HttpURLConnection + URLSession |
-| `ModelManager.kt` + `ModelManager.swift` | `shared/commonMain/ModelManager.kt` | `expect/actual` for the OS file system |
-| `Pipeline.kt` + `Pipeline.swift` | `shared/commonMain/Pipeline.kt` | Orchestration: pure Kotlin Flow |
-| `AppSettings.kt` + `AppSettings.swift` | `shared/commonMain/Settings.kt` | `multiplatform-settings` library |
-| `Entities.kt` + `Database.swift` | `shared/commonMain/Db.kt` | `SQLDelight` schema generates DAOs for both |
-| `SubtitleExport.kt` + `SubtitleExport.swift` | `shared/commonMain/SubtitleExport.kt` | Pure Kotlin string builders |
+| `Translator.kt` + `Translator.swift` | `shared/commonMain/Translator.kt` | HttpURLConnection + URLSession을 Ktor 클라이언트로 대체 |
+| `ModelManager.kt` + `ModelManager.swift` | `shared/commonMain/ModelManager.kt` | OS 파일 시스템에 `expect/actual` 사용 |
+| `Pipeline.kt` + `Pipeline.swift` | `shared/commonMain/Pipeline.kt` | 오케스트레이션: 순수 Kotlin Flow |
+| `AppSettings.kt` + `AppSettings.swift` | `shared/commonMain/Settings.kt` | `multiplatform-settings` 라이브러리 |
+| `Entities.kt` + `Database.swift` | `shared/commonMain/Db.kt` | `SQLDelight` 스키마가 양쪽 플랫폼 DAO를 생성 |
+| `SubtitleExport.kt` + `SubtitleExport.swift` | `shared/commonMain/SubtitleExport.kt` | 순수 Kotlin 문자열 빌더 |
 
-## What stays platform-native
+## 플랫폼 네이티브로 유지할 항목
 
-| Component | Reason |
+| 컴포넌트 | 이유 |
 | :-- | :-- |
-| SwiftUI / Compose UI | Per-platform idiomatic UX is the point |
-| `WhisperEngine.mm` + `ais_whisper_jni.cpp` | JNI / Obj-C++ bridges can't be Kotlin |
-| `AudioDecoder.swift` (AVFoundation) / `AudioDecoder.kt` (MediaCodec) | OS-specific media APIs |
-| `BackgroundTask.swift` (BGProcessingTask) / `TranscribeForegroundService.kt` | OS lifecycle APIs |
-| `PlayerView.swift` (AVPlayer) / `PlayerScreen.kt` (Media3) | OS-specific media playback |
-| `LiveActivity.swift` / `TranscribeQuickTile.kt` | OS-specific UI surfaces |
-| `CloudSync.swift` (CloudKit) | iOS-only API |
-| `AppShortcuts.swift` (App Intents) | iOS-only API |
+| SwiftUI / Compose UI | 플랫폼별 관용적 UX가 핵심이기 때문 |
+| `WhisperEngine.mm` + `ais_whisper_jni.cpp` | JNI / Obj-C++ 브릿지는 Kotlin으로 대체 불가 |
+| `AudioDecoder.swift` (AVFoundation) / `AudioDecoder.kt` (MediaCodec) | OS 전용 미디어 API |
+| `BackgroundTask.swift` (BGProcessingTask) / `TranscribeForegroundService.kt` | OS 라이프사이클 API |
+| `PlayerView.swift` (AVPlayer) / `PlayerScreen.kt` (Media3) | OS 전용 미디어 재생 |
+| `LiveActivity.swift` / `TranscribeQuickTile.kt` | OS 전용 UI 표면 |
+| `CloudSync.swift` (CloudKit) | iOS 전용 API |
+| `AppShortcuts.swift` (App Intents) | iOS 전용 API |
 
-## Target module layout
+## 목표 모듈 구조
 
 ```
 shared/
@@ -47,10 +46,9 @@ shared/
 │   └── commonTest/kotlin/     (fixtures shared with desktop translit tests)
 ```
 
-iOS consumes via `framework { baseName = "AisShared" }` exported as an XCFramework
-during a Gradle task. Swift code imports it like any binary framework.
+iOS는 Gradle 태스크 실행 시 XCFramework으로 내보내지는 `framework { baseName = "AisShared" }` 를 통해 사용한다. Swift 코드는 일반 바이너리 프레임워크처럼 임포트한다.
 
-## Dependencies to add (Gradle)
+## 추가할 의존성 (Gradle)
 
 ```kotlin
 commonMain.dependencies {
@@ -71,36 +69,34 @@ iosMain.dependencies {
 }
 ```
 
-## Migration steps (estimated)
+## 마이그레이션 단계 (예상 일정)
 
-1. **Scaffold** the `shared/` module with KMP plugin — 1 day.
-2. **Translator** (lowest risk, no DB) — port + replace Swift/Kotlin sites — 2 days.
-3. **Settings** + **SubtitleExport** (both pure) — 1 day.
-4. **ModelManager** (needs `expect` filesystem) — 1 day.
-5. **Pipeline** (needs Whisper handle passed in via `expect`) — 2 days.
-6. **SQLDelight schema** + DAO migration (deletes GRDB + SQLiteOpenHelper) — 3 days.
-7. **XCFramework export** + Swift call site update — 1 day.
-8. **CI updates**: Gradle builds the iOS XCFramework as part of the iOS workflow — 1 day.
+1. **스캐폴딩**: KMP 플러그인으로 `shared/` 모듈 생성 — 1일.
+2. **Translator** (위험도 가장 낮음, DB 없음): Swift/Kotlin 포팅 및 호출부 교체 — 2일.
+3. **Settings** + **SubtitleExport** (둘 다 순수 로직) — 1일.
+4. **ModelManager** (`expect` 파일시스템 필요) — 1일.
+5. **Pipeline** (Whisper 핸들을 `expect`로 전달 필요) — 2일.
+6. **SQLDelight 스키마** + DAO 마이그레이션 (GRDB + SQLiteOpenHelper 제거) — 3일.
+7. **XCFramework 내보내기** + Swift 호출부 업데이트 — 1일.
+8. **CI 업데이트**: iOS 워크플로우 내에서 Gradle이 iOS XCFramework를 빌드하도록 설정 — 1일.
 
-Total ≈ 12 working days for a solo developer, much faster if the iOS dev pairs.
+총 약 12 근무일 (솔로 개발자 기준; iOS 개발자가 페어링 시 훨씬 단축 가능).
 
-## Risks
+## 리스크
 
-- **KSP version churn** with Kotlin 2.0.x: we hit `Wrong plugin option format: null` during Phase 2; SQLDelight uses KSP, so this needs to be re-validated before the schema port.
-- **Ktor `Darwin` engine** adds ~600 KB to the IPA — measure first.
-- **Compose Multiplatform** is *out of scope* for this migration; UI stays native.
+- **KSP 버전 불안정성** (Kotlin 2.0.x 환경): Phase 2에서 `Wrong plugin option format: null` 오류 발생 이력 있음. SQLDelight가 KSP를 사용하므로 스키마 포팅 전 재검증 필요.
+- **Ktor `Darwin` 엔진**은 IPA에 ~600 KB를 추가함 — 반드시 먼저 측정할 것.
+- **Compose Multiplatform**은 이번 마이그레이션 *범위 외*; UI는 네이티브 유지.
 
-## Why not do this now
+## 지금 당장 하지 않는 이유
 
-We deferred KMM consolidation to Phase 3.5 because:
+KMM 통합을 Phase 3.5로 미룬 이유:
 
-1. Phase 0–2 needed validated, working code on both platforms first;
-   sharing untested code is just duplicating risk.
-2. The translit core (which is the highest-value shared asset) is already
-   shared via UniFFI — KMM only adds value for the business-logic layer.
-3. KSP/Kotlin compiler turbulence is real (see [P2-2b incident](signing.md));
-   stabilising the Phase-2 stack before adding KMP avoids cascading
-   debug sessions.
+1. Phase 0–2에서 양 플랫폼에 검증된 동작하는 코드가 먼저 필요했다;
+   검증되지 않은 코드를 공유하는 것은 리스크를 두 배로 늘리는 것뿐이다.
+2. 가장 높은 가치를 지닌 공유 자산인 변환 코어는 이미 UniFFI로 공유됨 —
+   KMM은 비즈니스 로직 레이어에만 가치를 더한다.
+3. KSP/Kotlin 컴파일러 불안정성은 실재한다 ([P2-2b 인시던트](signing.md) 참조);
+   KMP 추가 전 Phase-2 스택을 안정화하면 연쇄적인 디버깅 세션을 방지할 수 있다.
 
-When Phase 2 stabilises in production (≈ 2 weeks of telemetry post-launch),
-flip to Phase 3.5.
+Phase 2가 프로덕션에서 안정화되면 (출시 후 약 2주간의 텔레메트리 이후), Phase 3.5로 전환한다.
