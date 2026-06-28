@@ -115,6 +115,28 @@ struct PipelineView: View {
             }
             .disabled(!canRun)
             .accessibilityLabel(LocalizedStringKey("a11y.pipeline.run"))
+
+            if isTranscribing {
+                if runner.totalSegments > 0 && runner.progressFraction > 0 {
+                    VStack(alignment: .leading, spacing: 4) {
+                        ProgressView(value: runner.progressFraction)
+                            .tint(.accentColor)
+                        Text("\(runner.completedSegments)/\(runner.totalSegments) 세그먼트 번역")
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                    }
+                } else {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+            }
+        }
+    }
+
+    private var isTranscribing: Bool {
+        switch runner.stage {
+        case .decoding, .transcribing, .transliterating: return true
+        default: return false
         }
     }
 

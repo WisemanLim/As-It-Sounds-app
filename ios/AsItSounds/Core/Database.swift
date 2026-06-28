@@ -135,6 +135,16 @@ public final class AppDatabase: @unchecked Sendable {
         }
     }
 
+    public func clearSegments(fileId: String) throws {
+        _ = try dbQueue.write { db in
+            try SegmentRecord.filter(Column("fileId") == fileId).deleteAll(db)
+        }
+    }
+
+    public func mediaFile(id: String) throws -> MediaFile? {
+        try dbQueue.read { db in try MediaFile.fetchOne(db, key: id) }
+    }
+
     public func saveSegments(_ segments: [SegmentRecord], fileId: String) throws {
         try dbQueue.write { db in
             // Replace any existing segments for the file (simple semantics for the demo).

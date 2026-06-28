@@ -68,6 +68,12 @@ Swift 5.10 · SwiftUI · iOS 17+ &nbsp;·&nbsp; Kotlin 2.0 · Jetpack Compose ·
   - iOS: `UIDocumentPicker` (`Core/SubtitleExport.swift`)
   - Android: `ActivityResultContracts.CreateDocument` (`whisper/SubtitleExport.kt`)
 
+### Phase 4 — 전사 품질 및 UX 향상 ✅
+
+- **F1 진행률 표시** — `PipelineRunner` 에 `progressFraction` / `completedSegments` / `totalSegments` 추가. `PipelineView` 번역 루프 진행률 바(결정론적 `ProgressView`). Android: `PipelineEvent.TranslationProgress` + `LibraryScreen` 진행률 인디케이터 + "재개" 버튼.
+- **F2 재시도/재개** — 라이브러리에서 오류·처리중 파일에 재시도 버튼 노출. iOS: `AppDatabase.clearSegments(fileId:)` + `LibraryView.ProjectDetailView` 재시도 버튼(`retryFile()`). Android: `LibraryViewModel.retryProject()` + WorkManager 체크포인트 이어쓰기. `AS-It-Sounds-iOS`: `Services.retryTranscription(fileId:)` + `TranscriptionRetryBannerView`.
+- **F3 고품질 모델** — iOS: `ggml-medium.bin` (1,534 MB) + `ggml-large-v3-turbo.bin` (809 MB), HuggingFace `ggerganov/whisper.cpp` GGUF. Android: `MEDIUM` (1.5 GB, RAM 8 GB+) + `LARGE_V3_TURBO` (809 MB, RAM 6 GB+). 기기 RAM 가드 적용, 설정에서 선택 가능.
+
 ### Phase 3 — 플랫폼 통합 ✅ (스캐폴딩 완료)
 
 - **iCloud 동기화** — `Core/CloudSync.swift` (CKDatabase 프라이빗 DB 푸시/풀; iCloud 기능 + 컨테이너 `iCloud.com.asitsounds.ios` 필요)

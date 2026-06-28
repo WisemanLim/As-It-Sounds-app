@@ -4,17 +4,29 @@ import Observation
 /// One of the GGUF whisper models hosted by ggerganov/whisper.cpp on Hugging Face.
 /// We default to multilingual `base` (~142 MB) per the iPhone PRD.
 public enum WhisperModel: String, CaseIterable, Sendable {
-    case tiny = "tiny"
-    case base = "base"
-    case small = "small"
+    case tiny         = "tiny"
+    case base         = "base"
+    case small        = "small"
+    case medium       = "medium"
+    case largeV3Turbo = "large-v3-turbo"  // 추천: 최고 품질/속도 균형
 
-    /// Approximate on-disk size after download (bytes), used to show progress while
-    /// the server hasn't yet emitted `expectedContentLength`.
     var estimatedSize: Int64 {
         switch self {
-        case .tiny:  return  77 * 1024 * 1024   //  75 MB
-        case .base:  return 148 * 1024 * 1024   // 142 MB
-        case .small: return 488 * 1024 * 1024   // 466 MB
+        case .tiny:         return    77 * 1024 * 1024   //   75 MB
+        case .base:         return   148 * 1024 * 1024   //  142 MB
+        case .small:        return   488 * 1024 * 1024   //  466 MB
+        case .medium:       return 1_534 * 1024 * 1024   // 1534 MB
+        case .largeV3Turbo: return   809 * 1024 * 1024   //  809 MB
+        }
+    }
+
+    var displayName: String {
+        switch self {
+        case .tiny:         return "Tiny (75 MB)"
+        case .base:         return "Base (142 MB)"
+        case .small:        return "Small (466 MB)"
+        case .medium:       return "Medium (1.5 GB)"
+        case .largeV3Turbo: return "Large-v3-Turbo (809 MB) ★"
         }
     }
 

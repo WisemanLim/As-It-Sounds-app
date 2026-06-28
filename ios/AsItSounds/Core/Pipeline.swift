@@ -36,6 +36,9 @@ public enum PipelineStage: Sendable, Equatable {
 public final class PipelineRunner {
     public private(set) var stage: PipelineStage = .idle
     public private(set) var segments: [PipelineSegment] = []
+    public private(set) var progressFraction: Double = 0.0  // 번역 단계 진행률 0.0→1.0
+    public private(set) var completedSegments: Int = 0
+    public private(set) var totalSegments: Int = 0
 
     public init() {}
 
@@ -46,6 +49,9 @@ public final class PipelineRunner {
         translator: any Translator = DisabledTranslator()
     ) async {
         segments.removeAll()
+        progressFraction = 0.0
+        completedSegments = 0
+        totalSegments = 0
         stage = .decoding
 
         // Hop the heavy work off the main actor.
@@ -82,6 +88,7 @@ public final class PipelineRunner {
         case .success(let segs):
             // Phase A: show transcripts + Hangul immediately.
             segments = segs
+            totalSegments = segs.count
             stage = .transliterating  // reuse stage as "translating"
 
             // Phase B: translate each segment sequentially. Failures fall back
@@ -94,7 +101,12 @@ public final class PipelineRunner {
                     } catch {
                         segments[i].textKo = "(translate failed)"
                     }
+                    completedSegments = i + 1
+                    progressFraction = Double(i + 1) / Double(segs.count)
                 }
+            } else {
+                completedSegments = segs.count
+                progressFraction = 1.0
             }
             // Persist when caller supplied a target file row.
             if let persistFileId {

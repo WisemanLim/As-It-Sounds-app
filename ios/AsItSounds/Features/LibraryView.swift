@@ -95,15 +95,23 @@ struct ProjectDetailView: View {
                             .padding(.vertical, 2)
                         }
                     } label: {
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 2) {
                             Text(f.displayName)
-                            Text(f.status.rawValue)
-                                .font(.caption)
-                                .foregroundStyle(f.status == .error ? Color.red : Color.secondary)
+                            HStack {
+                                Text(f.status.rawValue)
+                                    .font(.caption)
+                                    .foregroundStyle(f.status == .error ? Color.red : Color.secondary)
+                                Spacer()
+                                if f.status == .error || f.status == .processing {
+                                    Button { retryFile(f) } label: {
+                                        Label("재시도", systemImage: "arrow.clockwise")
+                                            .font(.caption)
+                                    }
+                                    .buttonStyle(.borderless)
+                                }
+                            }
                             if let e = f.error, !e.isEmpty {
-                                Text(e)
-                                    .font(.caption2)
-                                    .foregroundStyle(.red)
+                                Text(e).font(.caption2).foregroundStyle(.red)
                             }
                         }
                     }
@@ -118,6 +126,35 @@ struct ProjectDetailView: View {
         files = (try? AppDatabase.shared.listFiles(projectId: project.id)) ?? []
         for f in files {
             segmentsByFile[f.id] = (try? AppDatabase.shared.listSegments(fileId: f.id)) ?? []
+        }
+    }
+
+    private func retryFile(_ file: MediaFile) {
+        let mm = ModelManager(model: AppSettings.shared.preferredModel)
+        guard case .ready(let modelURL) = mm.status else { return }
+        let audioURL = URL(fileURLWithPath: file.path)
+        var updated = file
+        updated.status = .processing
+        updated.error = nil
+        try? AppDatabase.shared.clearSegments(fileId: file.id)
+        try? AppDatabase.shared.updateMediaFile(updated)
+        reload()
+        Task {
+            let r = PipelineRunner()
+            r.persistFileId = file.id
+            let translator = AppSettings.shared.defaultTranslator.make()
+            await r.run(modelPath: modelURL.path, audioURL: audioURL, translator: translator)
+            var finalFile = file
+            switch r.stage {
+            case .done where !r.segments.isEmpty:
+                finalFile.status = .done; finalFile.error = nil
+            case .failed(let msg):
+                finalFile.status = .error; finalFile.error = msg
+            default:
+                finalFile.status = .error; finalFile.error = "재시도 실패"
+            }
+            try? AppDatabase.shared.updateMediaFile(finalFile)
+            reload()
         }
     }
 }

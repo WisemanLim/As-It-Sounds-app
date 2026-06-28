@@ -68,6 +68,12 @@ Swift 5.10 · SwiftUI · iOS 17+ &nbsp;·&nbsp; Kotlin 2.0 · Jetpack Compose ·
   - iOS: `UIDocumentPicker` (`Core/SubtitleExport.swift`)
   - Android: `ActivityResultContracts.CreateDocument` (`whisper/SubtitleExport.kt`)
 
+### Phase 4 — Transcription quality & UX improvements ✅
+
+- **F1 Progress tracking** — `PipelineRunner` gains `progressFraction` / `completedSegments` / `totalSegments`. `PipelineView` shows a deterministic `ProgressView` during the translation loop. Android: `PipelineEvent.TranslationProgress` event + `LibraryScreen` progress indicator with a "Resume" button.
+- **F2 Retry / resume** — Library shows a retry button for error/processing files. iOS: `AppDatabase.clearSegments(fileId:)` + retry button in `LibraryView.ProjectDetailView` (`retryFile()`). Android: `LibraryViewModel.retryProject()` + WorkManager checkpoint resume. `AS-It-Sounds-iOS`: `Services.retryTranscription(fileId:)` + `TranscriptionRetryBannerView`.
+- **F3 Higher-quality models** — iOS: `ggml-medium.bin` (1,534 MB) + `ggml-large-v3-turbo.bin` (809 MB) from HuggingFace `ggerganov/whisper.cpp` GGUF. Android: `MEDIUM` (1.5 GB, 8 GB+ RAM) + `LARGE_V3_TURBO` (809 MB, 6 GB+ RAM). RAM guard applied; selectable in Settings.
+
 ### Phase 3 — Platform integrations ✅ (scaffolded)
 
 - **iCloud sync** — `Core/CloudSync.swift` (CKDatabase private DB push/pull; requires iCloud capability + container `iCloud.com.asitsounds.ios`)
